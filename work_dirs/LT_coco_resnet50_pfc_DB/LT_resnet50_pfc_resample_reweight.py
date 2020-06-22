@@ -25,7 +25,7 @@ model = dict(
             focal=dict(focal=True, balance_param=2.0, gamma=2),
             logit_reg=dict(neg_scale=2.0, neg_bias=0.05),
             map_param=dict(alpha=0.1, beta=10.0, gamma=0.2),
-            loss_weight=1.0, freq_file='local/coco/longtail2017/class_freq.pkl')))
+            loss_weight=1.0, freq_file='appendix/coco/longtail2017/class_freq.pkl')))
 # model training and testing settings
 train_cfg = dict()
 test_cfg = dict()
@@ -33,7 +33,7 @@ test_cfg = dict()
 # dataset settings
 dataset_type = 'CocoDataset'
 data_root = '/mnt/SSD/det/coco/'
-online_data_root = 'local/'
+online_data_root = 'appendix/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 extra_aug = dict(
