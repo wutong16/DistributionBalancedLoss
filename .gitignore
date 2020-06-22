@@ -1,20 +1,3 @@
-# Test data
-tests/data/aud_wav
-tests/data/aud_feat
-tests/data/place_feat_raw
-tests/data/place_feat
-
-mmmovie/version.py
-local/
-
-tmp.py
-
-# compress files
-*.tar
-
-# apikey
-*apikey.txt
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -92,7 +75,8 @@ target/
 # pyenv
 .python-version
 
-# celery beat schedule file
+# celery beat
+schedule file
 celerybeat-schedule
 
 # SageMath parsed files
@@ -120,9 +104,25 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#
-*DS_Store
-*.vscode
+# cython generated cpp
+mllt/ops/nms/src/soft_nms_cpu.cpp
+mllt/version.py
+data
+.vscode
+.idea
 
-# pytorch model weights
-*.pth
+# custom
+*.pkl
+*.pkl.json
+*.log.json
+work_dirs/
+*.json
+*.zip
+        
+# wtfile
+test.py
+mllt/appendix/*
+tools/create_label/*
+*.jpg
+configs/*
+local/

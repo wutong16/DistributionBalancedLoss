@@ -40,7 +40,6 @@ def single_gpu_get_feat(model, data_loader, show=False):
             prog_bar.update()
     return results
 
-
 def multi_gpu_get_feat(model, data_loader, tmpdir=None):
     model.eval()
     results = []
@@ -61,7 +60,6 @@ def multi_gpu_get_feat(model, data_loader, tmpdir=None):
     results = collect_results(results, len(dataset), tmpdir)
 
     return results
-
 
 def collect_results(result_part, size, tmpdir=None):
     rank, world_size = get_dist_info()
@@ -131,28 +129,31 @@ def make_dataset_list(cfg):
 
     return dataset_list
 def parse_args():
-    parser = argparse.ArgumentParser(description='MMDet test detector')
-    parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', help='checkpoint file')
-    parser.add_argument('--out', help='output result file')
+    parser = argparse.ArgumentParser(description='extract features')
     parser.add_argument(
-        '--eval',
-        type=str,
-        nargs='+',
-        choices=['mAP', 'multi_label', 'pseudo', 'pos_neg' ],
-        default=['multi_label'],
-        help='eval metric')
-    parser.add_argument('--show', default=True, help='show results')
-    parser.add_argument('--tmpdir', help='tmp dir for writing some results')
+        'config', help='test config file path')
     parser.add_argument(
-        '--launcher',
-        choices=['none', 'pytorch', 'slurm', 'mpi'],
-        default='none',
-        help='job launcher')
-    parser.add_argument('--local_rank', type=int, default=0)
-    parser.add_argument('--testset_only', action='store_true')
-    parser.add_argument('--from_file', action='store_true')
-    parser.add_argument('--lt_filename', type=str, default='')
+        'checkpoint', help='checkpoint file')
+    parser.add_argument(
+        '--out', help='output result file')
+    parser.add_argument(
+        '--eval', type=str, nargs='+', choices=['mAP', 'multiple'],
+        default=['multiple'], help='eval metrics')
+    parser.add_argument(
+        '--show', default=True, help='show results')
+    parser.add_argument(
+        '--tmpdir', help='tmp dir for writing some results')
+    parser.add_argument(
+        '--launcher', choices=['none', 'pytorch', 'slurm', 'mpi'],
+        default='none', help='job launcher')
+    parser.add_argument(
+        '--local_rank', type=int, default=0)
+    parser.add_argument(
+        '--testset_only', type=bool, default=True, help='only eval test set')
+    parser.add_argument(
+        '--from_file', action='store_true', help='load network output results')
+    parser.add_argument(
+        '--lt_filename', type=str, default='')
     parser.add_argument('--job', type=str, default='eval_feat')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:

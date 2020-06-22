@@ -33,7 +33,6 @@ def build_dataset(cfg):
     elif isinstance(cfg['ann_file'], (list, tuple)):
         dataset = _concat_dataset(cfg)
     else:
-        print('ll')
         dataset = build_from_cfg(cfg, DATASETS)
 
     return dataset

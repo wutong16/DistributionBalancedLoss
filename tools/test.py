@@ -10,13 +10,15 @@ import torch
 import torch.distributed as dist
 from mmcv.runner import load_checkpoint, get_dist_info
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
+import sys
+sys.path.append(os.getcwd())
 
 from mllt.datasets.dataset_wrappers import ConcatDataset, RepeatDataset
 from mllt.datasets import build_dataset
 from mllt.apis import init_dist
 from mllt.datasets import build_dataloader
 from mllt.models import build_classifier
-from mllt.core.evaluation.eval_tools import lists_to_arrays
+from mllt.core.evaluation.eval_tools import lists_to_arrays, eval_acc, eval_F1
 from mllt.core.evaluation.mean_ap import eval_map
 from mllt.models.losses import accuracy
 

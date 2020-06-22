@@ -2,12 +2,10 @@ from __future__ import division
 import math
 import torch
 import numpy as np
-from mmcv.runner import get_dist_info 
+from mmcv.runner import get_dist_info
 from torch.utils.data import Sampler
 from torch.utils.data import DistributedSampler as _DistributedSampler
 import random
-import torchnet as tnt
-
 
 
 class DistributedSampler(_DistributedSampler):
@@ -285,20 +283,11 @@ class ClassAwareSampler(Sampler):
             cls_data_list[label].append(i)'''
         self.cls_data_list, self.gt_labels = data_source.get_index_dic(list=True, get_labels=True)
 
-        # # TODO: run only once to save class_freq
-        # class_freq = [len(cls) for cls in self.cls_data_list]
-        # import mmcv
-        # mmcv.dump(dict(class_freq=class_freq), 'mllt/appendix/VOCdevkit/longtail2012/class_freq.pkl')
-        # print('  ###### ONLY ONCE!')
-        # exit()
         self.num_classes = len(self.cls_data_list)
         self.data_iter_list = [RandomCycleIter(x) for x in self.cls_data_list] # repeated
         self.num_samples = int(max([len(x) for x in self.cls_data_list]) * len(self.cls_data_list)/ reduce) # attention, ~ 1500(person) * 80
-        # if self.num_samples > 60000:
-        #     reduce += 2
         self.num_samples_cls = num_samples_cls
         print('>>> Class Aware Sampler Built! Class number: {}, reduce {}'.format(num_classes, reduce))
-        # self.get_sample_per_class()
 
     def __iter__(self):
         return class_aware_sample_generator(self.class_iter, self.data_iter_list,
@@ -311,17 +300,6 @@ class ClassAwareSampler(Sampler):
         self.epoch = epoch
 
     def get_sample_per_class(self):
-
-        # TODO: run only once for each dataset to save the train and test data
-        # import mmcv
-        # dta = mmcv.load('./work_dirs/LT_voc_resnet50_pfc_resample/gt_and_results_e8.pkl')
-        # train_gt_labels = dta[1]['gt_labels']
-        # test_gt_labels = dta[0]['gt_labels']
-        # mmcv.dump(dict(train_gt_labels=train_gt_labels, test_gt_labels=test_gt_labels),
-        #           './mllt/appendix/VOCdevkit/longtail2012/longtail_gt_b6.pkl')
-        # print(len(train_gt_labels), len(test_gt_labels))
-        # exit()
-
         condition_prob = np.zeros([self.num_classes, self.num_classes])
         sample_per_cls = np.asarray([len(x) for x in self.gt_labels])
         rank_idx = np.argsort(-sample_per_cls)
@@ -347,109 +325,4 @@ class ClassAwareSampler(Sampler):
         print(np.min(sum_prob), np.max(need_sample))
         exit()
 
-
-#
-# class EpisodeSampler(Sampler):
-#     def __init__(self, dataset, num_classes=16, num_instances=5, select_classes=4, select_instances=1,
-#                  samples_per_gpu=4):
-#
-#         self.epoch = 0
-#
-#         self.index_dic = dataset.get_index_dic()
-#         self.pids = list(self.index_dic.keys())
-#         self.num_classes = num_classes
-#         self.samples_per_gpu = samples_per_gpu
-#
-#         self.select_classes = select_classes
-#         self.select_instances = select_instances
-#
-#         assert self.num_classes == len(self.pids)
-#         assert select_classes * select_instances == samples_per_gpu
-#         assert int(self.num_classes % select_classes) == 0
-#         # assert int(self.num_instances % select_instances) == 0
-#         self.instance_per_class = int(np.ceil(self.num_instances / self.select_instances)) * self.select_instances
-#
-#     def __len__(self):
-#         return self.num_classes * self.instance_per_class
-#
-#     def __iter__(self):
-#
-#         rand_seed = self.epoch
-#         random.seed(rand_seed)
-#         np.random.seed(rand_seed)
-#
-#         # batch_classes = random.choices(range(self.num_classes), self.)
-#         for k, v in self.index_dic.items():
-#             replace = True if self.instance_per_class > len(v) else False
-#             # todo: reduce repeated elements as much as possible!
-#             if replace:
-#                 v.extend(np.random.choice(v, size=self.instance_per_class - self.num_instances, replace=False).tolist())
-#                 v = np.asarray(v)
-#             else:
-#                 v = np.random.choice(v, size=self.instance_per_class, replace=False)
-#             np.random.shuffle(v)
-#             self.index_dic[k] = v
-#         devide = int(self.instance_per_class / self.select_instances)
-#         indices = torch.randperm(self.num_classes)
-#         ret = []
-#         for d in range(devide):
-#             for i in indices:
-#                 this = self.index_dic[int(i)][d * self.select_instances:(d + 1) * self.select_instances]
-#                 ret.extend(this.tolist())
-#
-#         # print('Done data sampling')
-#         return iter(ret)
-#
-#     def set_epoch(self, epoch):
-#         self.epoch = epoch
-#
-# _int_classes = 5
-# class BatchSampler(Sampler):
-#     """ Modified from BatchSampler in pytorch
-#     Wraps another sampler to yield a mini-batch of indices.
-#
-#     Args:
-#         sampler (Sampler): Base sampler.
-#         batch_size (int): Size of mini-batch.
-#         drop_last (bool): If ``True``, the sampler will drop the last batch if
-#             its size would be less than ``batch_size``
-#
-#     Example:
-# #         >>> list(BatchSampler(SequentialSampler(range(10)), batch_size=3, drop_last=False))
-#         [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]
-# #         >>> list(BatchSampler(SequentialSampler(range(10)), batch_size=3, drop_last=True))
-#         [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
-#     """
-#
-#     def __init__(self, sampler, batch_size, drop_last):
-#         if not isinstance(sampler, Sampler):
-#             raise ValueError("sampler should be an instance of "
-#                              "torch.utils.data.Sampler, but got sampler={}"
-#                              .format(sampler))
-#         if not isinstance(batch_size, _int_classes) or isinstance(batch_size, bool) or \
-#                 batch_size <= 0:
-#             raise ValueError("batch_size should be a positive integer value, "
-#                              "but got batch_size={}".format(batch_size))
-#         if not isinstance(drop_last, bool):
-#             raise ValueError("drop_last should be a boolean value, but got "
-#                              "drop_last={}".format(drop_last))
-#         self.sampler = sampler
-#         self.batch_size = batch_size
-#         self.drop_last = drop_last
-#
-#     def __iter__(self):
-#         batch = []
-#         for idx in self.sampler:
-#             batch.append(idx)
-#             if len(batch) == self.batch_size:
-#                 yield batch
-#                 batch = []
-#         if len(batch) > 0 and not self.drop_last:
-#             yield batch
-#
-#     def __len__(self):
-#         if self.drop_last:
-#             return len(self.sampler) // self.batch_size
-#         else:
-#             return (len(self.sampler) + self.batch_size - 1) // self.batch_size
 

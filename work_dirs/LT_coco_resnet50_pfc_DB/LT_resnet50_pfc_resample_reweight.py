@@ -21,7 +21,7 @@ model = dict(
         method='fc',
         loss_cls=dict(
             type='ResampleLoss', use_sigmoid=True,
-            reweight_func='rebalance', sum_prob=False,
+            reweight_func='rebalance',
             focal=dict(focal=True, balance_param=2.0, gamma=2),
             logit_reg=dict(neg_scale=2.0, neg_bias=0.05),
             map_param=dict(alpha=0.1, beta=10.0, gamma=0.2),
