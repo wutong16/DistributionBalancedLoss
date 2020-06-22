@@ -2,7 +2,6 @@ import math
 
 import torch.nn as nn
 
-from mllt.ops import DeformConv, ModulatedDeformConv
 from .resnet import Bottleneck as _Bottleneck
 from .resnet import ResNet
 from ..registry import BACKBONES
@@ -38,49 +37,16 @@ class Bottleneck(_Bottleneck):
             stride=self.conv1_stride,
             bias=False)
         self.add_module(self.norm1_name, norm1)
-        fallback_on_stride = False
-        self.with_modulated_dcn = False
-        if self.with_dcn:
-            fallback_on_stride = self.dcn.get('fallback_on_stride', False)
-            self.with_modulated_dcn = self.dcn.get('modulated', False)
-        if not self.with_dcn or fallback_on_stride:
-            self.conv2 = build_conv_layer(
-                self.conv_cfg,
-                width,
-                width,
-                kernel_size=3,
-                stride=self.conv2_stride,
-                padding=self.dilation,
-                dilation=self.dilation,
-                groups=groups,
-                bias=False)
-        else:
-            assert self.conv_cfg is None, 'conv_cfg must be None for DCN'
-            groups = self.dcn.get('groups', 1)
-            deformable_groups = self.dcn.get('deformable_groups', 1)
-            if not self.with_modulated_dcn:
-                conv_op = DeformConv
-                offset_channels = 18
-            else:
-                conv_op = ModulatedDeformConv
-                offset_channels = 27
-            self.conv2_offset = nn.Conv2d(
-                width,
-                deformable_groups * offset_channels,
-                kernel_size=3,
-                stride=self.conv2_stride,
-                padding=self.dilation,
-                dilation=self.dilation)
-            self.conv2 = conv_op(
-                width,
-                width,
-                kernel_size=3,
-                stride=self.conv2_stride,
-                padding=self.dilation,
-                dilation=self.dilation,
-                groups=groups,
-                deformable_groups=deformable_groups,
-                bias=False)
+        self.conv2 = build_conv_layer(
+            self.conv_cfg,
+            width,
+            width,
+            kernel_size=3,
+            stride=self.conv2_stride,
+            padding=self.dilation,
+            dilation=self.dilation,
+            groups=groups,
+            bias=False)
         self.add_module(self.norm2_name, norm2)
         self.conv3 = build_conv_layer(
             self.conv_cfg,
@@ -102,9 +68,7 @@ def make_res_layer(block,
                    style='pytorch',
                    with_cp=False,
                    conv_cfg=None,
-                   norm_cfg=dict(type='BN'),
-                   dcn=None,
-                   gcb=None):
+                   norm_cfg=dict(type='BN')):
     downsample = None
     if stride != 1 or inplanes != planes * block.expansion:
         downsample = nn.Sequential(
@@ -131,9 +95,7 @@ def make_res_layer(block,
             style=style,
             with_cp=with_cp,
             conv_cfg=conv_cfg,
-            norm_cfg=norm_cfg,
-            dcn=dcn,
-            gcb=gcb))
+            norm_cfg=norm_cfg))
     inplanes = planes * block.expansion
     for i in range(1, blocks):
         layers.append(
@@ -147,9 +109,7 @@ def make_res_layer(block,
                 style=style,
                 with_cp=with_cp,
                 conv_cfg=conv_cfg,
-                norm_cfg=norm_cfg,
-                dcn=dcn,
-                gcb=gcb))
+                norm_cfg=norm_cfg))
 
     return nn.Sequential(*layers)
 
@@ -197,8 +157,6 @@ class ResNeXt(ResNet):
         for i, num_blocks in enumerate(self.stage_blocks):
             stride = self.strides[i]
             dilation = self.dilations[i]
-            dcn = self.dcn if self.stage_with_dcn[i] else None
-            gcb = self.gcb if self.stage_with_gcb[i] else None
             planes = 64 * 2**i
             res_layer = make_res_layer(
                 self.block,
@@ -212,9 +170,7 @@ class ResNeXt(ResNet):
                 style=self.style,
                 with_cp=self.with_cp,
                 conv_cfg=self.conv_cfg,
-                norm_cfg=self.norm_cfg,
-                dcn=dcn,
-                gcb=gcb)
+                norm_cfg=self.norm_cfg)
             self.inplanes = planes * self.block.expansion
             layer_name = 'layer{}'.format(i + 1)
             self.add_module(layer_name, res_layer)
