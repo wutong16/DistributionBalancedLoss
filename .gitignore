@@ -105,11 +105,12 @@ venv.bak/
 .mypy_cache/
 
 # cython generated cpp
-mllt/ops/nms/src/soft_nms_cpu.cpp
 mllt/version.py
 data
 .vscode
 .idea
+*__pycache__*
+*.pyc
 
 # custom
 *.pkl
