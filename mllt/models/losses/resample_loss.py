@@ -42,6 +42,7 @@ class ResampleLoss(nn.Module):
                  weight_norm=None, # None, 'by_instance', 'by_batch'
                  freq_file='./class_freq.pkl'):
         super(ResampleLoss, self).__init__()
+
         assert (use_sigmoid is True) or (partial is False)
         self.use_sigmoid = use_sigmoid
         self.partial = partial
@@ -57,6 +58,7 @@ class ResampleLoss(nn.Module):
 
         # reweighting function
         self.reweight_func = reweight_func
+
         # normalization (optional)
         self.weight_norm = weight_norm
 
@@ -64,27 +66,30 @@ class ResampleLoss(nn.Module):
         self.focal = focal['focal']
         self.gamma = focal['gamma']
         self.balance_param = focal['balance_param']
+
         # mapping function params
         self.map_alpha = map_param['alpha']
         self.map_beta = map_param['beta']
         self.map_gamma = map_param['gamma']
-        # regularization params
-        self.logit_reg = logit_reg
-        self.neg_scale = logit_reg['neg_scale'] if 'neg_scale' in logit_reg else 1.0
-        neg_bias = logit_reg['neg_bias'] if 'neg_bias' in logit_reg else 0.0
-        self.neg_bias = torch.log(self.train_num / self.class_freq - 1) * neg_bias
+
         # CB loss params (optional)
         self.CB_beta = CB_loss['CB_beta']
         self.CB_mode = CB_loss['CB_mode']
 
         self.class_freq = torch.from_numpy(np.asarray(
             mmcv.load(freq_file)['class_freq'])).float().cuda()
-        self.num_classes = self.class_freq.shape[0]
-        print(self.num_classes)
-        exit()
         self.neg_class_freq = torch.from_numpy(
             np.asarray(mmcv.load(freq_file)['neg_class_freq'])).float().cuda()
+        self.num_classes = self.class_freq.shape[0]
         self.train_num = self.class_freq[0] + self.neg_class_freq[0]
+        # regularization params
+        self.logit_reg = logit_reg
+        self.neg_scale = logit_reg[
+            'neg_scale'] if 'neg_scale' in logit_reg else 1.0
+        neg_bias = logit_reg['neg_bias'] if 'neg_bias' in logit_reg else 0.0
+        self.neg_bias = torch.log(
+            self.train_num / self.class_freq - 1) * neg_bias
+
         self.freq_inv = torch.ones(self.class_freq.shape).cuda() / self.class_freq
         self.propotion_inv = self.train_num / self.class_freq
 
@@ -148,11 +153,9 @@ class ResampleLoss(nn.Module):
     def logit_reg_functions(self, labels, logits, weight=None):
         if not self.logit_reg:
             return logits, weight
-        if 'bias' in self.logit_reg or 'LDAM' in self.logit_reg:
-            logits = logits + self.pre_bias
         if 'neg_scale' in self.logit_reg:
             logits = (logits-self.neg_bias) * self.neg_scale * (1 - labels) + logits * labels
-            weight = weight / self.neg_scale.clone().detach() * (1 - labels) + weight * labels
+            weight = weight / self.neg_scale * (1 - labels) + weight * labels
         return logits, weight
 
     def rebalance_weight(self, gt_labels):

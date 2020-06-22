@@ -1,8 +1,8 @@
 from __future__ import division
 
 import os
-# import sys
-# sys.path.append(os.getcwd())
+import sys
+sys.path.append(os.getcwd())
 import argparse
 
 from mmcv import Config, mkdir_or_exist

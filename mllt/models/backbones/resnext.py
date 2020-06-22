@@ -2,7 +2,7 @@ import math
 
 import torch.nn as nn
 
-from mllt.ops import DeformConv, ModulatedDeformConv
+# from mllt.ops import DeformConv, ModulatedDeformConv
 from .resnet import Bottleneck as _Bottleneck
 from .resnet import ResNet
 from ..registry import BACKBONES
@@ -55,32 +55,33 @@ class Bottleneck(_Bottleneck):
                 groups=groups,
                 bias=False)
         else:
-            assert self.conv_cfg is None, 'conv_cfg must be None for DCN'
-            groups = self.dcn.get('groups', 1)
-            deformable_groups = self.dcn.get('deformable_groups', 1)
-            if not self.with_modulated_dcn:
-                conv_op = DeformConv
-                offset_channels = 18
-            else:
-                conv_op = ModulatedDeformConv
-                offset_channels = 27
-            self.conv2_offset = nn.Conv2d(
-                width,
-                deformable_groups * offset_channels,
-                kernel_size=3,
-                stride=self.conv2_stride,
-                padding=self.dilation,
-                dilation=self.dilation)
-            self.conv2 = conv_op(
-                width,
-                width,
-                kernel_size=3,
-                stride=self.conv2_stride,
-                padding=self.dilation,
-                dilation=self.dilation,
-                groups=groups,
-                deformable_groups=deformable_groups,
-                bias=False)
+            raise Exception
+            # assert self.conv_cfg is None, 'conv_cfg must be None for DCN'
+            # groups = self.dcn.get('groups', 1)
+            # deformable_groups = self.dcn.get('deformable_groups', 1)
+            # if not self.with_modulated_dcn:
+            #     conv_op = DeformConv
+            #     offset_channels = 18
+            # else:
+            #     conv_op = ModulatedDeformConv
+            #     offset_channels = 27
+            # self.conv2_offset = nn.Conv2d(
+            #     width,
+            #     deformable_groups * offset_channels,
+            #     kernel_size=3,
+            #     stride=self.conv2_stride,
+            #     padding=self.dilation,
+            #     dilation=self.dilation)
+            # self.conv2 = conv_op(
+            #     width,
+            #     width,
+            #     kernel_size=3,
+            #     stride=self.conv2_stride,
+            #     padding=self.dilation,
+            #     dilation=self.dilation,
+            #     groups=groups,
+            #     deformable_groups=deformable_groups,
+            #     bias=False)
         self.add_module(self.norm2_name, norm2)
         self.conv3 = build_conv_layer(
             self.conv_cfg,

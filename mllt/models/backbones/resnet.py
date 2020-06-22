@@ -125,8 +125,7 @@ class Bottleneck(nn.Module):
         self.with_gcb = gcb is not None
         self.gen_attention = gen_attention
         self.with_gen_attention = gen_attention is not None
-        print(self.with_dcn, self.with_gcb)
-        exit()
+        assert not self.with_dcn and not  self.with_gcb, 'compile error'
         if self.style == 'pytorch':
             self.conv1_stride = 1
             self.conv2_stride = stride
@@ -163,7 +162,7 @@ class Bottleneck(nn.Module):
                 dilation=dilation,
                 bias=False)
         else:
-            raise NameError
+            raise Exception
         #     assert conv_cfg is None, 'conv_cfg must be None for DCN'
         #     deformable_groups = dcn.get('deformable_groups', 1)
         #     if not self.with_modulated_dcn:

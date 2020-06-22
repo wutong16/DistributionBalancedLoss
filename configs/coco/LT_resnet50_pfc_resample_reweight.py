@@ -1,7 +1,7 @@
 # model settings
 model = dict(
     type='SimpleClassifier',
-    pretrained='modelzoo://resnet50',
+    pretrained='torchvision://resnet50',
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -21,11 +21,11 @@ model = dict(
         method='fc',
         loss_cls=dict(
             type='ResampleLoss', use_sigmoid=True,
-            reweight_func='rebalance', sum_prob=False,
+            reweight_func='rebalance',
             focal=dict(focal=True, balance_param=2.0, gamma=2),
             logit_reg=dict(neg_scale=2.0, neg_bias=0.05),
             map_param=dict(alpha=0.1, beta=10.0, gamma=0.2),
-            loss_weight=1.0, freq_file='ptcls/appendix/coco/longtail2017/class_freq.pkl')))
+            loss_weight=1.0, freq_file='mllt/appendix/coco/longtail2017/class_freq.pkl')))
 # model training and testing settings
 train_cfg = dict()
 test_cfg = dict()
@@ -33,7 +33,7 @@ test_cfg = dict()
 # dataset settings
 dataset_type = 'CocoDataset'
 data_root = 'data/coco/'
-online_data_root = 'ptcls/appendix/'
+online_data_root = 'mllt/appendix/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 extra_aug = dict(
@@ -107,7 +107,7 @@ start_epoch=0
 total_epochs = 8
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/LT_coco_resnet50_pfc_DB'
+work_dir = './work_dirs/LT_coco_resnet50_pfc_DB_'
 load_from = None
 if start_epoch > 0:
     resume_from = work_dir + '/epoch_{}.pth'.format(start_epoch)
