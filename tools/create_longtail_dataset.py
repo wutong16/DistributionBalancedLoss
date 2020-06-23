@@ -9,9 +9,8 @@ import numpy as np
 import mmcv
 import random
 from mmcv import mkdir_or_exist
-
-from mllt.datasets import build_dataloader
-from mllt.datasets.builder import *
+import sys
+sys.path.append(os.getcwd())
 from mllt.core import get_classes
 
 
@@ -54,7 +53,7 @@ def pareto_dist(b, num_classes, max, min=1, tail=0.99, display=False):
     """ generate a pareto distribution reference dist
     """
     rv = pareto(b)
-    classes = range(80)
+    classes = range(num_classes)
     classes_x = np.linspace(pareto.ppf(0.0, b), pareto.ppf(tail, b), num_classes)
     dist = rv.pdf(classes_x) * (max-min) / b + min
     dist  = dist.astype(int)
@@ -64,8 +63,8 @@ def pareto_dist(b, num_classes, max, min=1, tail=0.99, display=False):
         plt.savefig('./data/longtail/refer_num{:d}_b{:d}_max{:d}-min{:d}.jpg'.format(num_classes, b, max, min))
     return dist
 
-def create_voc_longtail(year=2012,  max=800, b = 6, save_dir ='./mllt/appendix/VOCdevkit/', draw=False):
-    data = mmcv.load('mllt/appendix/VOCdevkit/terse_gt_{}.pkl'.format(year))
+def create_voc_longtail(year=2012,  max=800, b = 6, save_dir ='./appendix/VOCdevkit/', draw=False):
+    data = mmcv.load('appendix/VOCdevkit/terse_gt_{}.pkl'.format(year))
     gt_labels = np.asarray(data['gt_labels'])
     img_id2idx = data['img_id2idx']
     idx2img_id = data['idx2img_id']
@@ -99,7 +98,8 @@ def create_voc_longtail(year=2012,  max=800, b = 6, save_dir ='./mllt/appendix/V
     pile_dist = []
     for i, idx in enumerate(rank_idx):
         new_sample = int(ref_dist[i] - tmp_dist[idx])
-        print('for idx:{:d}, have {:d}, want {:d}'.format(idx, len(tmp_idx_dic[idx]), ref_dist[i]))
+        print('for idx:{:4d}, have {:4d}, want {:4d}, total {:6d}'.format(
+            idx, len(tmp_idx_dic[idx]), ref_dist[i], len(set(ori_idx_dic[idx]))))
         if ref_dist[i] > sample_num[idx]:
             print('for class {}, want {}, which is more than the total num of {}'.format(
                 idx, ref_dist[i], sample_num[idx]))
@@ -177,7 +177,7 @@ def create_voc_longtail(year=2012,  max=800, b = 6, save_dir ='./mllt/appendix/V
 
     print('dataset length: {}'.format(len(select_img_id)))
 
-    save_path = save_dir+'img_id_b{}.txt'.format(b)
+    save_path = save_dir+'img_id.txt'.format(b)
     if osp.exists(save_path):
         print('{} already exists, won\'t overwrite!'.format(save_path))
     else:
@@ -191,8 +191,8 @@ def create_voc_longtail(year=2012,  max=800, b = 6, save_dir ='./mllt/appendix/V
 
 
 
-def create_coco_longtail(year=2017, max=1200, min=1, b = 6, save_dir ='./mllt/appendix/coco', draw=False):
-    data = mmcv.load('mllt/appendix/coco/terse_gt_{}.pkl'.format(year))
+def create_coco_longtail(year=2017, max=1200, min=1, b = 6, save_dir ='./appendix/coco', draw=False):
+    data = mmcv.load('appendix/coco/terse_gt_{}.pkl'.format(year))
     gt_labels = data['gt_labels']
     test_gt_labels = data['test_gt_labels']
     test_samples = np.sum(test_gt_labels, axis=0)
@@ -230,7 +230,8 @@ def create_coco_longtail(year=2017, max=1200, min=1, b = 6, save_dir ='./mllt/ap
     pile_dist = []
     for i, idx in enumerate(rank_idx):
         new_sample = int(ref_dist[i] - tmp_dist[idx])
-        print('for idx:{:d}, have {:d}, want {:d}, total {:d}'.format(idx, len(tmp_idx_dic[idx]), ref_dist[i], len(set(ori_idx_dic[idx]))))
+        print('for idx:{:4d}, have {:4d}, want {:4d}, total {:6d}'.format(
+            idx, len(tmp_idx_dic[idx]), ref_dist[i], len(set(ori_idx_dic[idx]))))
         if new_sample < 0:
             this_set = random.sample(tmp_idx_dic[idx], - new_sample)
             for t in this_set:
@@ -308,25 +309,26 @@ def create_coco_longtail(year=2017, max=1200, min=1, b = 6, save_dir ='./mllt/ap
         len(head_clas), len(middle_clas), len(tail_clas)))
     print('dataset length: {}'.format(len(select_img_id)))
 
-    if osp.exists(save_dir+'img_id.pkl'):
-        print('{} already exists, won\'t overwrite!'.format(save_dir+'img_id.pkl'))
+    save_path = osp.join(save_dir, 'img_id.pkl')
+    if osp.exists(save_path):
+        print('{} already exists, won\'t overwrite!'.format(save_path))
     else:
-        with open(save_dir+'img_id.pkl', "w") as f:
+        with open(save_path, "w") as f:
             for img_id in select_img_id:
                 f.writelines("%s\n" % img_id)
-        mmcv.dump(dict(head=head_clas, middle=middle_clas, tail=tail_clas), save_dir+'class_split.pkl')
-        print('new dataset saved in {}'.format(save_dir+'img_id.pkl'))
-        print('class split saved in {}'.format(save_dir+'class_split.pkl'))
+        mmcv.dump(dict(head=head_clas, middle=middle_clas, tail=tail_clas), osp.join(save_dir, 'class_split.pkl'))
+        print('new dataset saved in {}'.format(save_path))
+        print('class split saved in {}'.format(osp.join(save_dir, 'class_split.pkl')))
     return
 
-def lvis_longtail_statistics(file='./mllt/appendix/lvis/longtail/statistics.pkl', save_dir='./mllt/appendix/lvis/longtail/'):
+def lvis_longtail_statistics(file='./appendix/lvis/longtail/statistics.pkl', save_dir='./appendix/lvis/longtail/'):
     data = mmcv.load(file)
     train_gt_labels = np.asarray(data['train_gt_labels'])
     test_gt_labels = np.asarray(data['test_gt_labels'])
     CLASSES = data['CLASSES']
     image_count = data['image_count']
 
-    data = mmcv.load('mllt/appendix/lvis/terse_gt.pkl')
+    data = mmcv.load('appendix/lvis/terse_gt.pkl')
     gt_labels = data['gt_labels']
     img_id2idx = data['img_id2idx']
     idx2img_id = data['idx2img_id']
@@ -411,7 +413,6 @@ def lvis_longtail_statistics(file='./mllt/appendix/lvis/longtail/statistics.pkl'
 if __name__ == '__main__':
     create_voc_longtail()
     create_coco_longtail()
-    lvis_longtail_statistics()
 
 
 

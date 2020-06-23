@@ -1,6 +1,6 @@
 local/
 work_dirs/
-
+appendix/lvis/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -120,6 +120,7 @@ data
 *.log.json
 *.json
 *.zip
+*.pyc
         
 # wtfile
 test.py

@@ -2,20 +2,19 @@ import argparse
 import os
 import shutil
 import tempfile
-
 import torch
+import resource
 import torch.distributed as dist
+import mmcv
 from mmcv.runner import load_checkpoint, get_dist_info
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
-
+import sys
+sys.path.append(os.getcwd())
 
 from mllt.apis import init_dist
 from mllt.datasets import build_dataloader
 from mllt.models import build_classifier
-
 from mllt.core.evaluation.eval_tools import * #eval_paps_from_file, print_summary,eval_class_interaction
-import resource
-import mmcv
 from mllt.core.evaluation.mean_ap import eval_map
 from sklearn.metrics.pairwise import pairwise_distances
 

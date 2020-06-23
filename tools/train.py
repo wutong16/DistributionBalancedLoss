@@ -98,7 +98,6 @@ def main():
             CLASSES=train_dataset.CLASSES)
     # add an attribute for visualization convenience
     model.CLASSES = train_dataset.CLASSES
-
     train_classifier(
         model, train_dataset, cfg,
         distributed=distributed, validate=args.validate, logger=logger)

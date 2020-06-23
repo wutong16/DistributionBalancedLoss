@@ -63,6 +63,7 @@ def train_classifier(model,
 
     # start training
     if distributed:
+        raise NotImplementedError
         _dist_train(model, dataset, cfg, validate=validate, logger=logger)
     else:
         _non_dist_train(model, dataset, cfg, validate=validate, logger=logger)
