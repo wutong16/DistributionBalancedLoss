@@ -41,12 +41,7 @@ class ClsHead(nn.Module):
     def forward(self, x):
         x = x.view(x.size(0), -1)
         if self.method in ['fc','matmul']:
-            # todo: check if it's not equal
             cls_score = self.fc_cls(x)
-            # cls_weight = self.fc_cls.weight
-            # cls_score = torch.mm(x, cls_weight.t())
-            # if not self.no_bias:
-            #     cls_score += self.fc_cls.bias
         elif self.method == 'cos':
             cls_score = torch.cosine_similarity(x.unsqueeze(-1), self.fc_cls.weight.t().unsqueeze(0), dim=1)
         elif self.method == 'no_zero':

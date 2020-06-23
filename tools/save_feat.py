@@ -152,8 +152,6 @@ def parse_args():
         '--testset_only', type=bool, default=True, help='only eval test set')
     parser.add_argument(
         '--from_file', action='store_true', help='load network output results')
-    parser.add_argument(
-        '--lt_filename', type=str, default='')
     parser.add_argument('--job', type=str, default='eval_feat')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
@@ -185,7 +183,6 @@ def save_feat(args=None):
     cfg.model.pretrained = None
 
     # build the dataloader
-    # TODO: support multiple images per gpu (only minor changes are needed)
     if not cfg.model.get('savefeat', False):
         setattr(cfg.model, "savefeat", True)
     model = build_classifier(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
@@ -242,7 +239,6 @@ def save_feat(args=None):
             save_outputs[d] = dict(outputs=outputs, gt_labels=gt_labels)
         mmcv.dump(save_outputs, osp.join(cfg.work_dir, 'gt_and_results_e{}.pkl'.format(epoch)))
         print('Test results of pnorm saved at {}'.format(osp.join(cfg.work_dir, 'gt_and_results_e{}.pkl'.format(epoch))))
-        exit()
     elif args.job == 'eval_feat':
         if osp.exists(osp.join(cfg.work_dir, 'gt_and_results_e{}.pkl'.format(epoch))):
             test_results = mmcv.load(osp.join(cfg.work_dir, 'gt_and_results_e{}.pkl'.format(epoch)))[0]['outputs']
