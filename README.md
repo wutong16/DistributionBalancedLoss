@@ -3,6 +3,13 @@
 Code for our paper *Distribution-Balanced Loss for Multi-Label
 Classification in Long-Tailed Datasets*,  submitted to ECCV2020.
 
+## TODO
+- [ ] Clean the Repo
+- [ ] Distributed training is not supported currently
+- [ ] Evaluation with single GPU is not supported currently
+- [ ] uncertainty control of `create_longtail_dataset.py`
+- [ ] Running in the new environment is a little bit worse than in the original one, currently trying to fix the problem
+
 ## Requirements
 * Pytorch 1.1.0
 * Sklearn
@@ -14,14 +21,17 @@ You can create a new long-tail dataset with the following command.
 python tools/create_longtail_dataset.py
 ```
 
-## Train
-#### COCO-MLT
-
+## Run training
+#### Installation
+```
+git clone git@github.com:wutong16/DistributionBalance.git
+cd DistributionBalance
+```
+#### Train with COCO-MLT
 ```
 python tools/train.py configs/coco/LT_resnet50_pfc_DB.py 
 ```
-#### VOC-MLT
-
+#### Train with VOC-MLT
 ```
 python tools/train.py configs/voc/LT_resnet50_pfc_DB.py 
 ```
