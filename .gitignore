@@ -1,3 +1,7 @@
+local/
+appendix/
+work_dirs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -105,23 +109,21 @@ venv.bak/
 .mypy_cache/
 
 # cython generated cpp
-mllt/ops/nms/src/soft_nms_cpu.cpp
 mllt/version.py
 data
 .vscode
 .idea
+*__pycache__*
 
 # custom
 *.pkl
 *.pkl.json
 *.log.json
-work_dirs/
 *.json
 *.zip
         
 # wtfile
 test.py
-mllt/appendix/*
 tools/create_label/*
 *.jpg
 configs/*

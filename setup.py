@@ -146,21 +146,4 @@ if __name__ == '__main__':
             'mmcv>=0.2.6', 'numpy', 'matplotlib', 'six', 'terminaltables',
             'pycocotools', 'torch>=1.1'
         ],
-        ext_modules=[
-            make_cuda_ext(
-                name='deform_conv_cuda',
-                module='mllt.ops.dcn',
-                sources=[
-                    'src/deform_conv_cuda.cpp',
-                    'src/deform_conv_cuda_kernel.cu'
-                ]),
-            make_cuda_ext(
-                name='deform_pool_cuda',
-                module='mllt.ops.dcn',
-                sources=[
-                    'src/deform_pool_cuda.cpp',
-                    'src/deform_pool_cuda_kernel.cu'
-                ]),
-        ],
-        cmdclass={'build_ext': BuildExtension},
         zip_safe=False)
