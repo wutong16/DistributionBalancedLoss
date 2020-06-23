@@ -4,7 +4,7 @@ Code for our paper *Distribution-Balanced Loss for Multi-Label
 Classification in Long-Tailed Datasets*,  submitted to ECCV2020.
 
 ## TODO
-- [ ] Clean the Repo
+- [x] Clean the Repo
 - [ ] Distributed training is not supported currently
 - [ ] Evaluation with single GPU is not supported currently
 - [ ] uncertainty control of `create_longtail_dataset.py`
@@ -36,6 +36,11 @@ python tools/train.py configs/coco/LT_resnet50_pfc_DB.py
 python tools/train.py configs/voc/LT_resnet50_pfc_DB.py 
 ```
 
+#### Try basic LVIS
+Download annotation files ` lvis_v0.5_train.json` and `lvis_v0.5_val.json` from [lvisdataset.org](https://www.lvisdataset.org/dataset) and place them under `./data/LVIS`.
+```
+python tools/train.py configs/lvis/resnet50_pfc.py 
+```
 ## Evaluation
 
 #### COCO-MLT
