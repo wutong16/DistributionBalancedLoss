@@ -1,6 +1,8 @@
 local/
 work_dirs/
 appendix/lvis/
+files_required.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
