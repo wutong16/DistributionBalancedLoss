@@ -30,5 +30,16 @@ VOC_CLASSES = ('aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car',
                'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 'train',
                'tvmonitor')
 
-lvis_data = mmcv.load('./mllt/appendix/lvis/longtail/class_data.pkl')
+lvis_data = mmcv.load('./appendix/lvis/longtail/class_data.pkl')
 LVIS_CLASSES = lvis_data['LVIS_CLASSES']
+LVIS_SEEN = lvis_data['LVIS_SEEN']
+LVIS_UNSEEN = lvis_data['LVIS_UNSEEN']
+
+LVIS_SEEN_ID = set()
+LVIS_UNSEEN_ID = set()
+for id, cat in enumerate(LVIS_CLASSES):
+    if cat in LVIS_SEEN:
+        LVIS_SEEN_ID.add(id)
+    else:
+        assert cat in LVIS_UNSEEN
+        LVIS_UNSEEN_ID.add(id)

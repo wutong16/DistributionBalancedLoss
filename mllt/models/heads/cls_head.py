@@ -28,7 +28,6 @@ class ClsHead(nn.Module):
         self.fc_cls = nn.Linear(in_channels, num_classes)
         self.method = method
         self.no_bias = method in ['matmul', 'cos']
-        print('\033[1;35m head method: {}\033[0;0m'.format(method))
 
 
     def init_weights(self):

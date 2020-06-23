@@ -40,6 +40,8 @@ class LvisDataset(CustomDataset):
         ann_ids = self.lvis.get_ann_ids(img_ids=[img_id])
         ann_info = self.lvis.load_anns(ann_ids)
         ann = self._parse_ann_info(ann_info)
+        if self.see_only:
+            ann['labels'] = ann['labels'][list(self.see_only)]
         return ann
 
     def _filter_imgs(self, min_size=32):

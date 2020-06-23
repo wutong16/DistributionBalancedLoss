@@ -46,6 +46,7 @@ class CustomDataset(Dataset):
                  resize_keep_ratio=True,
                  test_mode=False,
                  class_split=None,
+                 see_only=set(),
                  save_info=False):
 
         # prefix of images path
@@ -59,7 +60,7 @@ class CustomDataset(Dataset):
         else:
             self.img_infos = self.load_annotations(ann_file)
         self.ann_file = ann_file
-
+        self.see_only = see_only
         # filter images with no annotation during training
         if not test_mode and 'width' in self.img_infos[0].keys():
             min_size = 32
