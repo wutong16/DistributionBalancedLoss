@@ -8,7 +8,6 @@ import argparse
 from mmcv import Config, mkdir_or_exist
 import mmcv
 import os.path as osp
-from mllt import __version__
 from mllt.datasets import build_dataset
 from mllt.apis import (train_classifier, init_dist, get_root_logger,
                        set_random_seed)
@@ -95,7 +94,6 @@ def main():
         # save mmdet version, config file content and class names in
         # checkpoints as meta data
         cfg.checkpoint_config.meta = dict(
-            mmdet_version=__version__,
             config=cfg.text,
             CLASSES=train_dataset.CLASSES)
     # add an attribute for visualization convenience
