@@ -271,6 +271,7 @@ class ClassAwareSampler(Sampler):
 
     def __init__(self, data_source, num_samples_cls=3, reduce = 4):
         random.seed(0)
+        torch.manual_seed(0)
         num_classes = len(np.unique(data_source.CLASSES))
 
         self.epoch = 0

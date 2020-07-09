@@ -87,8 +87,8 @@ class ResampleLoss(nn.Module):
         self.neg_scale = logit_reg[
             'neg_scale'] if 'neg_scale' in logit_reg else 1.0
         neg_bias = logit_reg['neg_bias'] if 'neg_bias' in logit_reg else 0.0
-        self.neg_bias = torch.log(
-            self.train_num / self.class_freq - 1) * neg_bias
+        self.neg_bias = - torch.log(
+            self.train_num / self.class_freq - 1) * neg_bias / self.neg_scale
 
         self.freq_inv = torch.ones(self.class_freq.shape).cuda() / self.class_freq
         self.propotion_inv = self.train_num / self.class_freq
@@ -153,8 +153,10 @@ class ResampleLoss(nn.Module):
     def logit_reg_functions(self, labels, logits, weight=None):
         if not self.logit_reg:
             return logits, weight
+        if 'neg_bias' in self.logit_reg:
+            logits += self.neg_bias
         if 'neg_scale' in self.logit_reg:
-            logits = (logits-self.neg_bias) * self.neg_scale * (1 - labels) + logits * labels
+            logits = logits * (1 - labels) * self.neg_scale  + logits * labels
             weight = weight / self.neg_scale * (1 - labels) + weight * labels
         return logits, weight
 
