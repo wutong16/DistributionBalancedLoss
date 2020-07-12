@@ -1,6 +1,6 @@
 # Distribution Balance Loss
 
-This repo is the implementation of paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
+The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
 
 <img src='./assets/intro.png' width=800>
 
