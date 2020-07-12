@@ -1,6 +1,6 @@
 # Distribution Balance Loss
 
-Code for our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
+This repo is the implementation of paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
 
 <img src='./assets/intro.png' width=800>
 
@@ -61,7 +61,7 @@ bash tools/dist_test.sh configs/voc/LT_resnet50_pfc_DB.py work_dirs/LT_voc_resne
 ## License and Citation
 The use of this software is RESTRICTED to **non-commercial research and educational purposes**.
 ```
-@inproceedings{CelebA-Spoof,
+@inproceedings{DistributionBalancedLoss,
   title={Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets},
   author={Wu, Tong and Huang, Qingqiu and Liu, Ziwei and Wang, Yu and Lin, Dahua},
   booktitle={European Conference on Computer Vision (ECCV)},
