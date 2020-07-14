@@ -1,16 +1,10 @@
 # Distribution-Balanced Loss
 
-The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).[[Project],coming soon](missing) [[Paper]](missing) 
+The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).[Project,coming soon](missing) [Paper,coming soon](missing) 
  
 [Tong Wu](https://github.com/wutong16)<sup></sup>,&nbsp;[Qingqiu Huang](http://qqhuang.cn/),&nbsp;[Ziwei Liu](https://liuziwei7.github.io/)<sup></sup>,&nbsp;[Yu Wang](http://nicsefc.ee.tsinghua.edu.cn/people/yu-wang/),&nbsp;[Dahua Lin](http://dahua.me/),&nbsp;
  
 <img src='./figures/overall_campdf.pdf' width=800>
-
-## TODO
-- [ ] Distributed training is not supported currently
-- [ ] Evaluation with single GPU is not supported currently
-- [ ] test pytorch 0.4.0
-- [ ] coco and voc distribution figure
 
 ## Requirements 
 * [Pytorch](https://pytorch.org/)
@@ -87,16 +81,16 @@ You can also create a new long-tailed dataset by downloading the annotations, `t
 appendix
   |--coco
     |--longtail2017
-      terse_gt_2017.pkl
+      |--terse_gt_2017.pkl
   |--VOCdevkit
     |--longtail2012
-      terse_gt_2012.pkl
+      |--terse_gt_2012.pkl
 ```
 Then run the following command, adjust the parameters as you like to control the distribution.
 ```
 python tools/create_longtail_dataset.py
 ```
-To update the corresponding `.pkl` files, please refer to `def _save_info` in `.\mllt\datasets\custom.py`
+To update the corresponding `class_freq.pkl` files, please refer to `def _save_info` in `.\mllt\datasets\custom.py`.
 
 ## License and Citation
 The use of this software is RESTRICTED to **non-commercial research and educational purposes**.
@@ -108,6 +102,10 @@ The use of this software is RESTRICTED to **non-commercial research and educatio
   year={2020}
 }
 ```
+## TODO
+- [ ] Distributed training is not supported currently
+- [ ] Evaluation with single GPU is not supported currently
+- [ ] test pytorch 0.4.0
 
 ## Contact
 
