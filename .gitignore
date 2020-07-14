@@ -1,6 +1,7 @@
 local/
 work_dirs/
 appendix/lvis/
+*terse_gt*
 files_required.py
 
 # Byte-compiled / optimized / DLL files
