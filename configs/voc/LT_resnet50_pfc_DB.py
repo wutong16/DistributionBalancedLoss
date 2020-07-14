@@ -23,7 +23,7 @@ model = dict(
             type='ResampleLoss', use_sigmoid=True,
             reweight_func='rebalance',
             focal=dict(focal=True, balance_param=2.0, gamma=2),
-            logit_reg=dict(neg_bias=0.05, neg_scale=5),
+            logit_reg=dict(init_bias=0.05, neg_scale=5),
             map_param=dict(alpha=0.1, beta=10.0, gamma=0.3),
             loss_weight=1.0, freq_file='appendix/VOCdevkit/longtail2012/class_freq.pkl')))
 # model training and testing settings
@@ -104,7 +104,7 @@ evaluation = dict(interval=5)
 total_epochs = 8
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/LT_voc_resnet50_pfc_DB_ptcls_seed1_try'
+work_dir = './work_dirs/LT_voc_resnet50_pfc_DB'
 load_from = None
 resume_from = None
 workflow = [('train', 1)]

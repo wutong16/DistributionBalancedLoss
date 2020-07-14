@@ -98,7 +98,7 @@ checkpoint_config = dict(interval=8)
 log_config = dict(
     interval=500,
     hooks=[
-        dict(type='TextLoggerHook'), 
+        dict(type='TextLoggerHook'),
     ])
 # yapf:enable
 evaluation = dict(interval=5)

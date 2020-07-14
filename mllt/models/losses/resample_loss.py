@@ -36,7 +36,7 @@ class ResampleLoss(nn.Module):
                  ),
                  logit_reg=dict(
                      neg_scale=5.0,
-                     neg_bias=0.1
+                     init_bias=0.1
                  ),
                  reweight_func=None,  # None, 'inv', 'sqrt_inv', 'rebalance', 'CB'
                  weight_norm=None, # None, 'by_instance', 'by_batch'
@@ -86,9 +86,9 @@ class ResampleLoss(nn.Module):
         self.logit_reg = logit_reg
         self.neg_scale = logit_reg[
             'neg_scale'] if 'neg_scale' in logit_reg else 1.0
-        neg_bias = logit_reg['neg_bias'] if 'neg_bias' in logit_reg else 0.0
-        self.neg_bias = - torch.log(
-            self.train_num / self.class_freq - 1) * neg_bias / self.neg_scale
+        init_bias = logit_reg['init_bias'] if 'init_bias' in logit_reg else 0.0
+        self.init_bias = - torch.log(
+            self.train_num / self.class_freq - 1) * init_bias / self.neg_scale
 
         self.freq_inv = torch.ones(self.class_freq.shape).cuda() / self.class_freq
         self.propotion_inv = self.train_num / self.class_freq
@@ -153,8 +153,8 @@ class ResampleLoss(nn.Module):
     def logit_reg_functions(self, labels, logits, weight=None):
         if not self.logit_reg:
             return logits, weight
-        if 'neg_bias' in self.logit_reg:
-            logits += self.neg_bias
+        if 'init_bias' in self.logit_reg:
+            logits += self.init_bias
         if 'neg_scale' in self.logit_reg:
             logits = logits * (1 - labels) * self.neg_scale  + logits * labels
             weight = weight / self.neg_scale * (1 - labels) + weight * labels
