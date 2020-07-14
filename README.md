@@ -12,7 +12,7 @@ The implementation of our paper *Distribution-Balanced Loss for Multi-Label Clas
 - [ ] test pytorch 0.4.0
 - [ ] coco and voc distribution figure
 
-## Requirements
+## Requirements 
 * [Pytorch](https://pytorch.org/)
 * [Sklearn](https://scikit-learn.org/stable/)
 
@@ -35,11 +35,6 @@ python tools/train.py configs/coco/LT_resnet50_pfc_DB.py
 python tools/train.py configs/voc/LT_resnet50_pfc_DB.py 
 ```
 
-- Try basic LVIS
-Download annotation files ` lvis_v0.5_train.json` and `lvis_v0.5_val.json` from [lvisdataset.org](https://www.lvisdataset.org/dataset) and place them under `./data/LVIS`.
-```
-python tools/train.py configs/lvis/resnet50_pfc.py 
-```
 ### Testing
 
 #### COCO-MLT

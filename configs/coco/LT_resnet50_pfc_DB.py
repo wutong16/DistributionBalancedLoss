@@ -23,7 +23,7 @@ model = dict(
             type='ResampleLoss', use_sigmoid=True,
             reweight_func='rebalance',
             focal=dict(focal=True, balance_param=2.0, gamma=2),
-            logit_reg=dict(neg_scale=2.0, neg_bias=0.05),
+            logit_reg=dict(neg_scale=2.0, init_bias=0.05),
             map_param=dict(alpha=0.1, beta=10.0, gamma=0.2),
             loss_weight=1.0, freq_file='appendix/coco/longtail2017/class_freq.pkl')))
 # model training and testing settings
@@ -98,7 +98,7 @@ checkpoint_config = dict(interval=8)
 log_config = dict(
     interval=500,
     hooks=[
-        dict(type='TextLoggerHook'),
+        dict(type='TextLoggerHook'), 
     ])
 # yapf:enable
 evaluation = dict(interval=5)
