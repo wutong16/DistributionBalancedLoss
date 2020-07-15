@@ -1,8 +1,10 @@
 # Distribution-Balanced Loss
 
-The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).[Project,coming soon](missing) [Paper,coming soon](missing) 
+[[Project]]() [[Paper]]()
+
+The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
  
-[Tong Wu](https://github.com/wutong16)<sup></sup>,&nbsp;[Qingqiu Huang](http://qqhuang.cn/),&nbsp;[Ziwei Liu](https://liuziwei7.github.io/)<sup></sup>,&nbsp;[Yu Wang](http://nicsefc.ee.tsinghua.edu.cn/people/yu-wang/),&nbsp;[Dahua Lin](http://dahua.me/),&nbsp;
+[Tong Wu](https://github.com/wutong16)<sup></sup>,&nbsp;[Qingqiu Huang](http://qqhuang.cn/),&nbsp;[Ziwei Liu](https://liuziwei7.github.io/)<sup></sup>,&nbsp;[Yu Wang](http://nicsefc.ee.tsinghua.edu.cn/people/yu-wang/),&nbsp;[Dahua Lin](http://dahua.me/).&nbsp;
  
 <img src='./figures/overall_campdf.pdf' width=800>
 
