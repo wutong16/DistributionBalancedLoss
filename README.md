@@ -6,7 +6,7 @@ The implementation of our paper *Distribution-Balanced Loss for Multi-Label Clas
  
 [Tong Wu](https://github.com/wutong16)<sup></sup>,&nbsp;[Qingqiu Huang](http://qqhuang.cn/),&nbsp;[Ziwei Liu](https://liuziwei7.github.io/)<sup></sup>,&nbsp;[Yu Wang](http://nicsefc.ee.tsinghua.edu.cn/people/yu-wang/),&nbsp;[Dahua Lin](http://dahua.me/).&nbsp;
  
-<img src='./assets/intro.png' width=800>
+<img src='./assets/overall.png' width=800>
 
 ## Requirements 
 * [Pytorch](https://pytorch.org/)
