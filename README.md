@@ -14,8 +14,8 @@ The implementation of our paper *Distribution-Balanced Loss for Multi-Label Clas
 
 ## Installation
 ```
-git clone git@github.com:wutong16/DistributionBalance.git
-cd DistributionBalance
+git clone git@github.com:wutong16/DistributionBalancedLoss.git
+cd DistributionBalancedLoss
 ```
 ## Quick start
 
