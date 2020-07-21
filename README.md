@@ -1,6 +1,6 @@
 # Distribution-Balanced Loss
 
-[[Project]]() [[Paper]]()
+[[Project]]() [[Paper]](https://arxiv.org/abs/2007.09654)
 
 The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
  
