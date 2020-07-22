@@ -1,6 +1,6 @@
 # Distribution-Balanced Loss
 
-[[Project]]() [[Paper]](https://arxiv.org/abs/2007.09654)
+[[Paper]](https://arxiv.org/abs/2007.09654)
 
 The implementation of our paper *Distribution-Balanced Loss for Multi-Label Classification in Long-Tailed Datasets* (ECCV2020 **Spotlight**).
  
@@ -111,4 +111,4 @@ The use of this software is RESTRICTED to **non-commercial research and educatio
 
 ## Contact
 
-This repo is currently maintained by [Tong Wu]([@wutong16](https://github.com/wutong16)) and [Qingqiu Huang]((https://github.com/hqqasw))
+This repo is currently maintained by [@wutong16](https://github.com/wutong16) and [@hqqasw](https://github.com/hqqasw)
