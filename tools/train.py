@@ -27,9 +27,6 @@ def parse_args():
         '--work_dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume_from', help='the checkpoint file to resume from')
-    parser.add_argument(
-        '--gpus', type=int, default=1, help='number of gpus to use '
-        '(only applicable to non-distributed training)')
     # todo: add validate
     parser.add_argument(
         '--validate', action='store_true', help='if validate when training')
