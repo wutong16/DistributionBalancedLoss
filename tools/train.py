@@ -34,7 +34,7 @@ def parse_args():
         '--gpus', type=int, default=1, help='number of gpus to use '
         '(only applicable to non-distributed training)')
     parser.add_argument(
-        '--seed', type=int, default=0, help='random seed')
+        '--seed', type=int, default=1, help='random seed')
     parser.add_argument(
         '--launcher', choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none', help='job launcher')
